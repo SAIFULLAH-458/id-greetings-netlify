@@ -1,0 +1,12 @@
+{
+  "name": "eid-ul-azha-backend",
+  "version": "1.0.0",
+  "description": "Backend API for Eid greeting sharing with short ID-based links.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

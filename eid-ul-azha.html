@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eid ul Azha Mubarak 🌙</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Noto+Nastaliq+Urdu&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #D4AF37;
+    --gold-light: #F5D76E;
+    --gold-pale: #FFF8DC;
+    --emerald: #0D5C3A;
+    --emerald-deep: #072C1C;
+    --emerald-mid: #145A32;
+    --night: #03140A;
+    --cream: #FDF6E3;
+    --ivory: #FFFDF5;
+    --rose: #C8A2A2;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--night);
+    color: var(--cream);
+    font-family: 'Cormorant Garamond', serif;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+
+  /* CANVAS */
+  #starCanvas {
+    position: fixed; top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0; pointer-events: none;
+  }
+
+  /* PETALS */
+  .petals-container {
+    position: fixed; top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none; z-index: 1; overflow: hidden;
+  }
+  .petal {
+    position: absolute; top: -40px;
+    opacity: 0.7;
+    animation: petalFall linear infinite;
+    border-radius: 0 50% 0 50%;
+  }
+  @keyframes petalFall {
+    0%   { transform: translateY(-40px) rotate(0deg)   translateX(0);   opacity: 0.8; }
+    100% { transform: translateY(110vh) rotate(720deg) translateX(80px); opacity: 0;   }
+  }
+
+  /* LANTERNS */
+  .lanterns-row {
+    position: fixed; top: 0; left: 0; right: 0;
+    display: flex; justify-content: space-around;
+    z-index: 2; pointer-events: none;
+  }
+  .lantern-wrap {
+    display: flex; flex-direction: column; align-items: center;
+    animation: lanternSway 3s ease-in-out infinite alternate;
+    transform-origin: top center;
+  }
+  .lantern-wrap:nth-child(2) { animation-delay: -1s; }
+  .lantern-wrap:nth-child(3) { animation-delay: -2s; }
+  .lantern-wrap:nth-child(4) { animation-delay: -0.5s; }
+  .lantern-wrap:nth-child(5) { animation-delay: -1.5s; }
+  @keyframes lanternSway {
+    from { transform: rotate(-8deg); }
+    to   { transform: rotate(8deg);  }
+  }
+  .lantern-string { width:1px; height:60px; background: linear-gradient(to bottom, rgba(212,175,55,0.6), rgba(212,175,55,0.2)); }
+  .lantern-body {
+    width:28px; height:44px;
+    background: radial-gradient(ellipse at center, rgba(255,200,60,0.95) 0%, rgba(200,100,0,0.9) 60%, rgba(150,60,0,0.8) 100%);
+    border-radius: 40% 40% 50% 50% / 30% 30% 40% 40%;
+    box-shadow: 0 0 15px 6px rgba(255,180,50,0.5), 0 0 30px 10px rgba(255,150,30,0.3);
+    border: 1px solid rgba(212,175,55,0.6); position: relative;
+  }
+  .lantern-body::before,.lantern-body::after {
+    content:''; position:absolute; left:50%; transform:translateX(-50%);
+    width:32px; height:2px; background:rgba(212,175,55,0.8); border-radius:1px;
+  }
+  .lantern-body::before { top:10px; }
+  .lantern-body::after  { bottom:10px; }
+  .lantern-bottom { width:10px; height:8px; background:rgba(212,175,55,0.7); clip-path:polygon(20% 0%,80% 0%,100% 100%,0% 100%); }
+
+  /* MOSQUE */
+  .mosque-container {
+    position: fixed; bottom:0; left:0; right:0;
+    z-index:2; pointer-events:none;
+    display:flex; justify-content:center; align-items:flex-end;
+  }
+  .mosque-svg { width:100%; max-width:900px; opacity:0.18; }
+
+  /* PAGE WRAPPER */
+  .page-wrapper { position:relative; z-index:3; min-height:100vh; }
+
+  /* HERO */
+  .hero {
+    min-height:100vh; display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    text-align:center; padding:120px 20px 60px; position:relative;
+  }
+  .moon-container {
+    position:relative; width:120px; height:120px;
+    margin:0 auto 20px;
+    animation: moonFloat 4s ease-in-out infinite;
+  }
+  @keyframes moonFloat {
+    0%,100% { transform:translateY(0px);   filter:drop-shadow(0 0 20px rgba(212,175,55,0.8)); }
+    50%      { transform:translateY(-15px); filter:drop-shadow(0 0 35px rgba(212,175,55,1)); }
+  }
+  .moon-svg { width:100%; height:100%; }
+
+  .arabic-text {
+    font-family:'Noto Nastaliq Urdu',serif;
+    font-size:clamp(2rem,6vw,4rem);
+    color:var(--gold);
+    text-shadow:0 0 30px rgba(212,175,55,0.6),0 0 60px rgba(212,175,55,0.3);
+    margin-bottom:12px;
+    animation:textGlow 3s ease-in-out infinite alternate;
+    line-height:1.5;
+  }
+  @keyframes textGlow {
+    from { text-shadow:0 0 20px rgba(212,175,55,0.5),0 0 40px rgba(212,175,55,0.2); }
+    to   { text-shadow:0 0 40px rgba(212,175,55,0.9),0 0 80px rgba(212,175,55,0.5),0 0 120px rgba(212,175,55,0.2); }
+  }
+  .hero-title {
+    font-family:'Cinzel Decorative',serif;
+    font-size:clamp(2.2rem,6vw,5rem); font-weight:900;
+    background:linear-gradient(135deg,var(--gold-pale),var(--gold),#B8860B,var(--gold-light),var(--gold-pale));
+    background-size:300% 300%;
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+    animation:shimmerText 4s ease infinite, fadeSlideUp 1.2s ease both;
+    line-height:1.15; letter-spacing:2px;
+  }
+  @keyframes shimmerText {
+    0%   { background-position:0% 50%; }
+    50%  { background-position:100% 50%; }
+    100% { background-position:0% 50%; }
+  }
+  @keyframes fadeSlideUp {
+    from { opacity:0; transform:translateY(40px); }
+    to   { opacity:1; transform:translateY(0); }
+  }
+  .hero-subtitle {
+    font-size:clamp(1rem,2.5vw,1.5rem); color:rgba(253,246,227,0.75);
+    font-style:italic; margin-top:14px; letter-spacing:3px;
+    animation:fadeSlideUp 1.4s ease 0.3s both;
+  }
+  .divider-ornament {
+    margin:24px auto; display:flex; align-items:center;
+    gap:12px; width:fit-content;
+    animation:fadeSlideUp 1.4s ease 0.5s both;
+  }
+  .divider-line { width:80px; height:1px; background:linear-gradient(to right,transparent,var(--gold),transparent); }
+  .divider-diamond { width:10px; height:10px; background:var(--gold); transform:rotate(45deg); box-shadow:0 0 10px rgba(212,175,55,0.7); }
+
+  /* ===== QURBANI / SHEEP SECTION ===== */
+  .qurbani-section {
+    display:flex; justify-content:center; align-items:center;
+    gap:40px; padding:10px 20px 30px; flex-wrap:wrap;
+    animation:fadeSlideUp 1.6s ease 0.7s both;
+  }
+  .sheep-wrap {
+    display:flex; flex-direction:column; align-items:center; gap:6px;
+    animation:sheepBob 2.5s ease-in-out infinite;
+  }
+  .sheep-wrap:nth-child(2) { animation-delay:-1.2s; }
+  .sheep-wrap:nth-child(3) { animation-delay:-0.6s; }
+  @keyframes sheepBob {
+    0%,100% { transform:translateY(0); }
+    50%      { transform:translateY(-6px); }
+  }
+  .sheep-label {
+    font-size:0.7rem; letter-spacing:2px; color:rgba(212,175,55,0.5);
+    text-transform:uppercase;
+  }
+
+  /* ===== GREETING SECTION ===== */
+  .greeting-section {
+    padding:60px 20px 80px;
+    display:flex; flex-direction:column; align-items:center;
+  }
+
+  /* PERSONALIZED BANNER */
+  #personalizedBanner {
+    display:none; width:100%; max-width:680px;
+    background:linear-gradient(135deg,rgba(13,92,58,0.85) 0%,rgba(7,44,28,0.95) 100%);
+    border:1px solid rgba(212,175,55,0.4); border-radius:20px;
+    padding:40px 44px; text-align:center;
+    box-shadow:0 0 60px rgba(212,175,55,0.12),0 20px 60px rgba(0,0,0,0.5);
+    backdrop-filter:blur(10px); margin-bottom:50px;
+    animation:cardReveal 1s ease both; position:relative; overflow:hidden;
+  }
+  #personalizedBanner::before {
+    content:''; position:absolute; inset:0;
+    background:radial-gradient(ellipse at 50% 0%,rgba(212,175,55,0.08) 0%,transparent 70%);
+    pointer-events:none;
+  }
+  @keyframes cardReveal {
+    from { opacity:0; transform:translateY(30px) scale(0.97); }
+    to   { opacity:1; transform:translateY(0) scale(1); }
+  }
+  .banner-sheep-row {
+    display:flex; justify-content:center; gap:16px; margin-bottom:18px;
+  }
+  .banner-to {
+    font-family:'Cormorant Garamond',serif;
+    font-size:clamp(1rem,2.5vw,1.2rem); color:rgba(212,175,55,0.7);
+    letter-spacing:4px; text-transform:uppercase; margin-bottom:8px;
+  }
+  .banner-name {
+    font-family:'Cinzel Decorative',serif;
+    font-size:clamp(1.8rem,5vw,3rem); color:var(--gold-light);
+    text-shadow:0 0 30px rgba(212,175,55,0.5);
+    margin-bottom:20px; line-height:1.2;
+  }
+  .banner-msg {
+    font-size:clamp(1rem,2vw,1.25rem); color:rgba(253,246,227,0.88);
+    font-style:italic; line-height:1.85; margin-bottom:24px;
+    border-left:2px solid rgba(212,175,55,0.4); padding-left:18px; text-align:left;
+  }
+  .banner-from {
+    font-family:'Cinzel Decorative',serif;
+    font-size:clamp(0.85rem,2vw,1.1rem); color:var(--gold); letter-spacing:2px;
+  }
+
+  /* CREATE GREETING FORM */
+  .create-card {
+    width:100%; max-width:620px;
+    background:linear-gradient(145deg,rgba(13,92,58,0.6),rgba(7,44,28,0.8));
+    border:1px solid rgba(212,175,55,0.25); border-radius:20px;
+    padding:44px; backdrop-filter:blur(12px);
+    box-shadow:0 20px 60px rgba(0,0,0,0.4);
+    position:relative; overflow:hidden;
+  }
+  .create-card::before {
+    content:''; position:absolute; top:-40px; right:-40px;
+    width:160px; height:160px;
+    background:radial-gradient(circle,rgba(212,175,55,0.08),transparent 70%);
+    border-radius:50%;
+  }
+  .section-label {
+    font-family:'Cinzel Decorative',serif;
+    font-size:clamp(1rem,2.5vw,1.4rem); color:var(--gold);
+    text-align:center; margin-bottom:8px; letter-spacing:1px;
+  }
+  .section-sublabel {
+    text-align:center; color:rgba(253,246,227,0.55);
+    font-style:italic; font-size:0.95rem; margin-bottom:32px;
+  }
+  .form-group { margin-bottom:20px; }
+  .form-group label {
+    display:block; font-size:0.85rem; letter-spacing:3px;
+    text-transform:uppercase; color:rgba(212,175,55,0.7); margin-bottom:8px;
+  }
+  .form-group input, .form-group textarea {
+    width:100%;
+    background:rgba(3,20,10,0.5);
+    border:1px solid rgba(212,175,55,0.2); border-radius:10px;
+    padding:14px 18px; color:var(--cream);
+    font-family:'Cormorant Garamond',serif; font-size:1.05rem;
+    outline:none; transition:border-color 0.3s,box-shadow 0.3s; resize:vertical;
+  }
+  .form-group input:focus, .form-group textarea:focus {
+    border-color:rgba(212,175,55,0.6);
+    box-shadow:0 0 0 3px rgba(212,175,55,0.08);
+  }
+  .form-group input::placeholder, .form-group textarea::placeholder {
+    color:rgba(253,246,227,0.3); font-style:italic;
+  }
+  .auto-msg-toggle {
+    display:flex; align-items:center; gap:10px;
+    margin-bottom:20px; cursor:pointer;
+  }
+  .auto-msg-toggle input[type="checkbox"] { width:18px; height:18px; accent-color:var(--gold); cursor:pointer; }
+  .auto-msg-toggle span { font-size:0.9rem; color:rgba(253,246,227,0.65); font-style:italic; }
+  .btn-generate {
+    width:100%; padding:16px;
+    background:linear-gradient(135deg,#B8860B,var(--gold),#D4AF37,#B8860B);
+    background-size:300% 100%;
+    border:none; border-radius:12px;
+    font-family:'Cinzel Decorative',serif; font-size:1rem;
+    color:var(--night); font-weight:700; cursor:pointer;
+    letter-spacing:1.5px; transition:all 0.4s ease;
+    animation:btnShimmer 3s ease infinite;
+    box-shadow:0 4px 20px rgba(212,175,55,0.3);
+  }
+  @keyframes btnShimmer {
+    0%   { background-position:0% 50%; }
+    50%  { background-position:100% 50%; }
+    100% { background-position:0% 50%; }
+  }
+  .btn-generate:hover { transform:translateY(-2px); box-shadow:0 8px 30px rgba(212,175,55,0.5); }
+  .btn-generate:active { transform:translateY(0); }
+
+  /* LINK BOX */
+  #linkBox {
+    display:none; margin-top:24px;
+    background:rgba(3,20,10,0.6);
+    border:1px solid rgba(212,175,55,0.3); border-radius:12px;
+    padding:18px; animation:fadeSlideUp 0.5s ease both;
+  }
+  #linkBox p {
+    font-size:0.8rem; letter-spacing:2px; text-transform:uppercase;
+    color:rgba(212,175,55,0.7); margin-bottom:10px;
+  }
+  .link-row { display:flex; gap:10px; flex-wrap:wrap; }
+  #generatedLink {
+    flex:1; background:rgba(0,0,0,0.3);
+    border:1px solid rgba(212,175,55,0.15); border-radius:8px;
+    padding:10px 14px; color:rgba(245,215,110,0.9);
+    font-size:0.82rem; word-break:break-all;
+    font-family:monospace; min-width:0; line-height:1.5;
+  }
+  .btn-copy {
+    padding:10px 22px;
+    background:var(--emerald-mid);
+    border:1px solid rgba(212,175,55,0.3); border-radius:8px;
+    color:var(--gold); font-family:'Cinzel Decorative',serif;
+    font-size:0.8rem; cursor:pointer; transition:all 0.3s; white-space:nowrap;
+  }
+  .btn-copy:hover { background:var(--emerald); box-shadow:0 0 15px rgba(212,175,55,0.2); }
+  .btn-copy.copied { background:#0D5C3A; color:#7fffb0; border-color:rgba(127,255,176,0.4); }
+
+  /* DUA SECTION */
+  .dua-section {
+    padding:40px 20px 60px; text-align:center;
+    max-width:680px; margin:0 auto;
+  }
+  .dua-card {
+    background:linear-gradient(135deg,rgba(13,92,58,0.5),rgba(7,44,28,0.7));
+    border:1px solid rgba(212,175,55,0.2); border-radius:20px;
+    padding:40px 36px; backdrop-filter:blur(8px);
+    position:relative; overflow:hidden;
+  }
+  .dua-card::after {
+    content:''; position:absolute;
+    bottom:0; left:0; right:0; height:2px;
+    background:linear-gradient(to right,transparent,var(--gold),transparent);
+  }
+  .dua-arabic {
+    font-family:'Noto Nastaliq Urdu',serif;
+    font-size:clamp(1.5rem,4vw,2.2rem); color:var(--gold-light);
+    margin-bottom:16px; line-height:2;
+    text-shadow:0 0 20px rgba(212,175,55,0.3);
+  }
+  .dua-english {
+    font-size:clamp(1rem,2vw,1.2rem); color:rgba(253,246,227,0.75);
+    font-style:italic; line-height:1.85;
+  }
+
+  /* GEO ORNAMENT */
+  .geo-ornament {
+    width:60px; height:60px; margin:0 auto 20px; opacity:0.7;
+    animation:spinSlow 20s linear infinite;
+  }
+  @keyframes spinSlow { from{transform:rotate(0deg);} to{transform:rotate(360deg);} }
+
+  /* FOOTER */
+  .footer {
+    position:relative; z-index:3; text-align:center;
+    padding:28px 20px 20px;
+    border-top:1px solid rgba(212,175,55,0.1);
+  }
+  .footer-eid {
+    color:rgba(212,175,55,0.45); font-size:1.27rem;
+    letter-spacing:2px; margin-bottom:10px;
+  }
+  .footer-credit {
+    color:rgba(230, 185, 36, 0.562); font-size:1.18rem;
+    letter-spacing:1.5px; font-style:italic;
+  }
+  .footer-credit span { color:rgba(235, 193, 54, 0.894); font-style:normal; }
+
+  /* SPARKLES */
+  .sparkle {
+    position:fixed; pointer-events:none; z-index:10;
+    width:6px; height:6px; border-radius:50%;
+    background:var(--gold-light);
+    animation:sparkleFade 1s ease-out forwards;
+  }
+  @keyframes sparkleFade {
+    0%   { opacity:1; transform:scale(1) translate(0,0); }
+    100% { opacity:0; transform:scale(0) translate(var(--tx),var(--ty)); }
+  }
+
+  /* RESPONSIVE */
+  @media (max-width:600px) {
+    .create-card { padding:28px 20px; }
+    #personalizedBanner { padding:30px 22px; }
+    .lantern-wrap:nth-child(n+4) { display:none; }
+    .dua-card { padding:28px 20px; }
+    .hero { padding-top:100px; }
+    .qurbani-section { gap:24px; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="starCanvas"></canvas>
+<div class="petals-container" id="petalsContainer"></div>
+
+<!-- Lanterns -->
+<div class="lanterns-row">
+  <div class="lantern-wrap"><div class="lantern-string"></div><div class="lantern-body"></div><div class="lantern-bottom"></div></div>
+  <div class="lantern-wrap"><div class="lantern-string"></div><div class="lantern-body"></div><div class="lantern-bottom"></div></div>
+  <div class="lantern-wrap"><div class="lantern-string"></div><div class="lantern-body"></div><div class="lantern-bottom"></div></div>
+  <div class="lantern-wrap"><div class="lantern-string"></div><div class="lantern-body"></div><div class="lantern-bottom"></div></div>
+  <div class="lantern-wrap"><div class="lantern-string"></div><div class="lantern-body"></div><div class="lantern-bottom"></div></div>
+</div>
+
+<!-- Mosque Silhouette -->
+<div class="mosque-container">
+  <svg class="mosque-svg" viewBox="0 0 900 300" xmlns="http://www.w3.org/2000/svg">
+    <path fill="#D4AF37" d="
+      M0,300 L0,220 L60,220 L60,180 L80,180 L80,160 L90,100 Q95,60 100,100 L110,160 L110,180 L130,180 L130,220 L150,220
+      L150,200 L170,200 L170,180 L180,180 L180,160 L185,120 Q190,90 195,120 L200,160 L200,180 L210,180 L210,200 L230,200
+      L230,220 L260,220 L260,200
+      M260,220 L280,220 L280,100 Q280,60 285,40 Q290,15 300,10 Q310,15 315,40 Q320,60 320,100 L320,220
+      L340,220 L340,200 L360,200 L360,220
+      M360,220 L420,220
+      L420,80 Q420,40 440,20 Q450,8 460,5 Q470,8 480,20 Q500,40 500,80 L500,220 L560,220
+      M560,220 L560,200 L580,200 L580,220 L600,220
+      L600,100 Q600,60 605,40 Q610,15 620,10 Q630,15 635,40 Q640,60 640,100 L640,220
+      L670,220 L670,200 L690,200 L690,180 L700,180 L700,160 L705,120 Q710,90 715,120 L720,160 L720,180 L730,180 L730,200 L750,200
+      L750,220 L770,220 L770,180 L790,180 L790,160 L800,100 Q805,60 810,100 L820,160 L820,180 L840,180 L840,220 L900,220 L900,300 Z
+    "/>
+  </svg>
+</div>
+
+<div class="page-wrapper">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="moon-container">
+      <svg class="moon-svg" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="moonGrad" cx="40%" cy="35%" r="65%">
+            <stop offset="0%" stop-color="#FFF8DC"/>
+            <stop offset="40%" stop-color="#F5D76E"/>
+            <stop offset="100%" stop-color="#D4AF37"/>
+          </radialGradient>
+          <filter id="moonGlow">
+            <feGaussianBlur stdDeviation="4" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+        <circle cx="60" cy="60" r="52" fill="none" stroke="rgba(212,175,55,0.15)" stroke-width="6"/>
+        <path d="M70,20 Q45,40 45,60 Q45,80 70,100 Q35,95 20,60 Q35,25 70,20Z" fill="url(#moonGrad)" filter="url(#moonGlow)"/>
+        <circle cx="78" cy="34" r="3" fill="#FFF8DC" opacity="0.9"/>
+        <polygon points="60,5 62,11 68,11 63,15 65,21 60,17 55,21 57,15 52,11 58,11" fill="#F5D76E" opacity="0.85"/>
+        <polygon points="100,50 101,54 105,54 102,56 103,60 100,58 97,60 98,56 95,54 99,54" fill="#F5D76E" opacity="0.7"/>
+        <polygon points="20,30 21,33 24,33 22,35 23,38 20,36 17,38 18,35 16,33 19,33" fill="#F5D76E" opacity="0.65"/>
+      </svg>
+    </div>
+
+    <div class="arabic-text">عيد الأضحى مبارك</div>
+
+    <h1 class="hero-title">Eid ul Azha<br>Mubarak</h1>
+
+    <div class="divider-ornament">
+      <div class="divider-line"></div>
+      <div class="divider-diamond"></div>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="rgba(212,175,55,0.8)">
+        <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/>
+      </svg>
+      <div class="divider-diamond"></div>
+      <div class="divider-line"></div>
+    </div>
+
+    <p class="hero-subtitle">May Allah accept your Qurbani &amp; bless your family</p>
+
+    <!-- QURBANI ANIMALS ROW -->
+    <div class="qurbani-section">
+
+      <!-- Sheep 1 -->
+      <div class="sheep-wrap">
+        <svg width="80" height="70" viewBox="0 0 80 70" xmlns="http://www.w3.org/2000/svg">
+          <!-- fluffy body -->
+          <ellipse cx="40" cy="38" rx="26" ry="18" fill="#e8dcc8"/>
+          <circle cx="22" cy="30" r="10" fill="#ede3d0"/>
+          <circle cx="30" cy="24" r="11" fill="#e8dcc8"/>
+          <circle cx="40" cy="22" r="11" fill="#ede3d0"/>
+          <circle cx="50" cy="24" r="11" fill="#e8dcc8"/>
+          <circle cx="58" cy="30" r="10" fill="#ede3d0"/>
+          <!-- body fill -->
+          <ellipse cx="40" cy="34" rx="24" ry="14" fill="#ede3d0"/>
+          <!-- head -->
+          <ellipse cx="16" cy="36" rx="10" ry="9" fill="#c8b89a"/>
+          <!-- ear -->
+          <ellipse cx="10" cy="30" rx="4" ry="6" fill="#b8a88a" transform="rotate(-20,10,30)"/>
+          <!-- eye -->
+          <circle cx="13" cy="35" r="2" fill="#3a2a1a"/>
+          <circle cx="13.7" cy="34.3" r="0.6" fill="white"/>
+          <!-- nostril -->
+          <ellipse cx="10" cy="40" rx="1.5" ry="1" fill="#9a8070"/>
+          <!-- legs -->
+          <rect x="24" y="48" width="6" height="16" rx="3" fill="#c8b89a"/>
+          <rect x="34" y="48" width="6" height="16" rx="3" fill="#c8b89a"/>
+          <rect x="44" y="48" width="6" height="16" rx="3" fill="#c8b89a"/>
+          <rect x="54" y="46" width="6" height="16" rx="3" fill="#c8b89a"/>
+          <!-- hooves -->
+          <rect x="24" y="61" width="6" height="5" rx="2" fill="#5a4030"/>
+          <rect x="34" y="61" width="6" height="5" rx="2" fill="#5a4030"/>
+          <rect x="44" y="61" width="6" height="5" rx="2" fill="#5a4030"/>
+          <rect x="54" y="59" width="6" height="5" rx="2" fill="#5a4030"/>
+          <!-- tail -->
+          <ellipse cx="66" cy="34" rx="5" ry="6" fill="#ede3d0"/>
+          <!-- gold collar -->
+          <rect x="20" y="41" width="12" height="3" rx="1.5" fill="#D4AF37" opacity="0.8"/>
+          <!-- little star on collar -->
+          <polygon points="26,40 26.5,41.5 28,41.5 26.8,42.3 27.3,43.8 26,43 24.7,43.8 25.2,42.3 24,41.5 25.5,41.5" fill="#FFF8DC" opacity="0.9"/>
+        </svg>
+        <span class="sheep-label">🌙 Qurbani</span>
+      </div>
+
+      <!-- Crescent + knife ornament (Qurbani symbol) -->
+      <div class="sheep-wrap" style="animation-delay:-0.3s">
+        <svg width="70" height="70" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="circleGrad" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="rgba(212,175,55,0.15)"/>
+              <stop offset="100%" stop-color="rgba(212,175,55,0.03)"/>
+            </radialGradient>
+          </defs>
+          <circle cx="35" cy="35" r="32" fill="url(#circleGrad)" stroke="rgba(212,175,55,0.3)" stroke-width="1"/>
+          <!-- crescent -->
+          <path d="M42,12 Q24,22 24,35 Q24,48 42,58 Q18,53 12,35 Q18,17 42,12Z" fill="#D4AF37" opacity="0.85"/>
+          <!-- 3 stars -->
+          <polygon points="52,18 53,21 56,21 53.5,23 54.5,26 52,24.5 49.5,26 50.5,23 48,21 51,21" fill="#F5D76E"/>
+          <polygon points="56,32 56.8,34.5 59.5,34.5 57.3,36 58.1,38.5 56,37 53.9,38.5 54.7,36 52.5,34.5 55.2,34.5" fill="#F5D76E" opacity="0.8"/>
+          <polygon points="50,44 50.6,46 52.8,46 51,47.4 51.6,49.4 50,48.2 48.4,49.4 49,47.4 47.2,46 49.4,46" fill="#F5D76E" opacity="0.7"/>
+        </svg>
+        <span class="sheep-label">✦ Spirit of Sacrifice</span>
+      </div>
+
+      <!-- Goat -->
+      <div class="sheep-wrap" style="animation-delay:-1.8s">
+        <svg width="80" height="70" viewBox="0 0 80 70" xmlns="http://www.w3.org/2000/svg">
+          <!-- body -->
+          <ellipse cx="42" cy="38" rx="22" ry="15" fill="#c8b48a"/>
+          <!-- neck -->
+          <rect x="18" y="28" width="10" height="14" rx="5" fill="#b8a47a"/>
+          <!-- head -->
+          <ellipse cx="14" cy="26" rx="10" ry="9" fill="#c8b48a"/>
+          <!-- horns -->
+          <path d="M8,18 Q4,10 9,8 Q10,14 12,18" fill="none" stroke="#8a7050" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M18,16 Q22,8 18,6 Q16,12 16,17" fill="none" stroke="#8a7050" stroke-width="2.5" stroke-linecap="round"/>
+          <!-- ear -->
+          <ellipse cx="8" cy="26" rx="4" ry="6" fill="#b8a47a" transform="rotate(15,8,26)"/>
+          <!-- eye -->
+          <ellipse cx="12" cy="24" rx="2.2" ry="1.8" fill="#2a1a0a"/>
+          <circle cx="12.5" cy="23.5" r="0.6" fill="white"/>
+          <!-- beard -->
+          <path d="M10,33 Q8,38 10,40" fill="none" stroke="#9a8060" stroke-width="2" stroke-linecap="round"/>
+          <!-- legs -->
+          <rect x="26" y="50" width="6" height="15" rx="3" fill="#b8a47a"/>
+          <rect x="36" y="50" width="6" height="15" rx="3" fill="#b8a47a"/>
+          <rect x="46" y="50" width="6" height="15" rx="3" fill="#b8a47a"/>
+          <rect x="56" y="48" width="6" height="15" rx="3" fill="#b8a47a"/>
+          <!-- hooves -->
+          <rect x="26" y="62" width="6" height="5" rx="2" fill="#4a3020"/>
+          <rect x="36" y="62" width="6" height="5" rx="2" fill="#4a3020"/>
+          <rect x="46" y="62" width="6" height="5" rx="2" fill="#4a3020"/>
+          <rect x="56" y="60" width="6" height="5" rx="2" fill="#4a3020"/>
+          <!-- tail -->
+          <path d="M64,36 Q70,30 68,38" fill="none" stroke="#b8a47a" stroke-width="3" stroke-linecap="round"/>
+          <!-- gold collar -->
+          <rect x="18" y="33" width="11" height="3" rx="1.5" fill="#D4AF37" opacity="0.8"/>
+        </svg>
+        <span class="sheep-label">🐐 Bakra Eid</span>
+      </div>
+
+    </div><!-- end qurbani-section -->
+  </section>
+
+  <!-- GREETING SECTION -->
+  <section class="greeting-section">
+
+    <div id="personalizedBanner">
+      <div class="banner-sheep-row">
+        <span style="font-size:1.8rem">🐑</span>
+        <span style="font-size:1.8rem">🌙</span>
+        <span style="font-size:1.8rem">🐑</span>
+      </div>
+      <div class="banner-to">🌙 Eid ul Azha Mubarak to</div>
+      <div class="banner-name" id="bannerRecipient"></div>
+      <div class="banner-msg" id="bannerMessage"></div>
+      <div class="banner-from" id="bannerFrom"></div>
+    </div>
+
+    <div class="create-card">
+      <h2 class="section-label">🕌 Send Eid Greetings</h2>
+      <p class="section-sublabel">Create a personalized link &amp; share with your loved ones</p>
+
+      <div class="form-group">
+        <label>To (Recipient's Name)</label>
+        <input type="text" id="recipientName" placeholder="e.g. Ahmed, Fatima, Ammi Jan...">
+      </div>
+      <div class="form-group">
+        <label>From (Your Name)</label>
+        <input type="text" id="senderName" placeholder="e.g. Ali, Your Dost...">
+      </div>
+
+      <label class="auto-msg-toggle">
+        <input type="checkbox" id="autoMsgToggle" checked>
+        <span>✨ Auto-generate a beautiful Eid message for me</span>
+      </label>
+
+      <div class="form-group" id="customMsgGroup" style="display:none">
+        <label>Your Personal Message</label>
+        <textarea id="customMsg" rows="4" placeholder="Write your heartfelt Eid message here..."></textarea>
+      </div>
+
+      <button class="btn-generate" onclick="generateLink()">🌙 Generate My Eid Greeting Link</button>
+
+      <div id="linkBox">
+        <p>✦ Your Personalized Eid Link — Share with your loved ones</p>
+        <div class="link-row">
+          <div id="generatedLink"></div>
+          <button class="btn-copy" id="copyBtn" onclick="copyLink()">Copy 🔗</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DUA SECTION -->
+  <section class="dua-section">
+    <svg class="geo-ornament" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="30,2 35,20 55,20 40,32 46,50 30,39 14,50 20,32 5,20 25,20" fill="none" stroke="#D4AF37" stroke-width="1.5"/>
+      <polygon points="30,10 33,22 46,22 36,29 39,42 30,35 21,42 24,29 14,22 27,22" fill="rgba(212,175,55,0.2)"/>
+    </svg>
+    <div class="dua-card">
+      <div class="dua-arabic">تَقَبَّلَ اللهُ مِنَّا وَمِنكُم</div>
+      <div class="dua-english">
+        "May Allah accept from us and from you."<br><br>
+        On this blessed day of Eid ul Azha, may your Qurbani be accepted,<br>
+        your prayers answered, and your home filled with<br>
+        joy, peace, and countless blessings. Ameen. 🤲
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-eid">✦ &nbsp; EID UL AZHA MUBARAK 1446H &nbsp; ✦ &nbsp; عيد مبارك &nbsp; ✦</div>
+    <div class="footer-credit">Designed &amp; Developed by <span>Muhammad Saifullah</span> | Founder of <span>Novixor Builds</span></div>
+  </footer>
+
+</div><!-- end page-wrapper -->
+
+<script>
+// ===== STARS =====
+const canvas = document.getElementById('starCanvas');
+const ctx = canvas.getContext('2d');
+let stars = [];
+function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+resizeCanvas();
+window.addEventListener('resize', () => { resizeCanvas(); initStars(); });
+
+function initStars() {
+  stars = [];
+  for (let i = 0; i < 200; i++) {
+    stars.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height*0.7,
+      r: Math.random()*1.8+0.3, speed: Math.random()*0.01+0.005, phase: Math.random()*Math.PI*2 });
+  }
+}
+initStars();
+
+function drawStars() {
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  const grad = ctx.createLinearGradient(0,0,0,canvas.height);
+  grad.addColorStop(0,'#010A04'); grad.addColorStop(0.5,'#03140A'); grad.addColorStop(1,'#061A0D');
+  ctx.fillStyle = grad; ctx.fillRect(0,0,canvas.width,canvas.height);
+  const t = Date.now()/1000;
+  stars.forEach(s => {
+    const a = 0.4 + 0.6*Math.abs(Math.sin(t*s.speed*10+s.phase));
+    ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+    ctx.fillStyle = `rgba(255,248,220,${a})`; ctx.fill();
+  });
+  requestAnimationFrame(drawStars);
+}
+drawStars();
+
+// ===== PETALS =====
+const petalColors = ['#C8A2A2','#D4AF37','#E8C97A','#B5875F','#DDB892'];
+const petalContainer = document.getElementById('petalsContainer');
+for (let i = 0; i < 22; i++) {
+  const p = document.createElement('div');
+  p.className = 'petal';
+  p.style.left = Math.random()*100+'vw';
+  p.style.animationDuration = (6+Math.random()*8)+'s';
+  p.style.animationDelay = (Math.random()*10)+'s';
+  p.style.background = petalColors[Math.floor(Math.random()*petalColors.length)];
+  p.style.opacity = (0.4+Math.random()*0.5).toString();
+  p.style.width = p.style.height = (8+Math.random()*10)+'px';
+  p.style.transform = `rotate(${Math.random()*360}deg)`;
+  petalContainer.appendChild(p);
+}
+
+// ===== SPARKLES =====
+document.addEventListener('click', e => {
+  for (let i = 0; i < 8; i++) {
+    const s = document.createElement('div');
+    s.className = 'sparkle';
+    const angle = (Math.PI*2/8)*i, dist = 30+Math.random()*30;
+    s.style.left = e.clientX+'px'; s.style.top = e.clientY+'px';
+    s.style.setProperty('--tx', Math.cos(angle)*dist+'px');
+    s.style.setProperty('--ty', Math.sin(angle)*dist+'px');
+    s.style.background = petalColors[Math.floor(Math.random()*petalColors.length)];
+    document.body.appendChild(s);
+    setTimeout(() => s.remove(), 1000);
+  }
+});
+
+// ===== TOGGLE CUSTOM MSG =====
+const toggle = document.getElementById('autoMsgToggle');
+const customGroup = document.getElementById('customMsgGroup');
+toggle.addEventListener('change', () => {
+  customGroup.style.display = toggle.checked ? 'none' : 'block';
+});
+
+// ===== AUTO MESSAGES =====
+const autoMessages = [
+  "Wishing you and your family a blessed Eid ul Azha filled with the spirit of sacrifice, gratitude, and togetherness. May Allah accept your Qurbani and grant you peace, health, and endless happiness. Eid Mubarak! 🌙✨",
+  "On this auspicious occasion of Eid ul Azha, may the blessings of Allah fill your home with warmth, your heart with joy, and your life with love. May your Qurbani be accepted and your duas answered. Ameen! 🤲",
+  "May the divine blessings of Allah bring you joy, happiness, and prosperity. Wishing you and your beloved family a very happy Eid ul Azha. May this day strengthen your faith and fill your life with grace. Eid Mubarak! 🌸",
+  "As you celebrate Eid ul Azha with your family, may Allah shower His choicest blessings upon you. May this Eid bring renewed hope, stronger faith, and beautiful memories that last a lifetime. Khair Mubarak! ✨",
+];
+
+// ===== GENERATE LINK =====
+const FUNCTION_URL = '/.netlify/functions/greetings';
+const PAGE_URL = window.location.href.split('?')[0];
+
+async function generateLink() {
+  const to      = document.getElementById('recipientName').value.trim();
+  const from    = document.getElementById('senderName').value.trim();
+  const isAuto  = document.getElementById('autoMsgToggle').checked;
+  const customMsg = document.getElementById('customMsg').value.trim();
+
+  if (!to || !from) { alert('Please enter both the recipient\'s name and your name 🌙'); return; }
+
+  const msg = isAuto ? autoMessages[Math.floor(Math.random() * autoMessages.length)] : (customMsg || autoMessages[0]);
+
+  try {
+    const response = await fetch(FUNCTION_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ to, from, msg })
+    });
+
+    if (!response.ok) {
+      throw new Error('Unable to save greeting. Please try again.');
+    }
+
+    const data = await response.json();
+    const link = `${PAGE_URL}?id=${encodeURIComponent(data.id)}`;
+
+    document.getElementById('generatedLink').textContent = link;
+    document.getElementById('linkBox').style.display = 'block';
+  } catch (error) {
+    alert(error.message || 'Could not create the greeting link.');
+  }
+}
+
+// ===== COPY LINK — robust fallback =====
+function copyLink() {
+  const linkText = document.getElementById('generatedLink').textContent;
+  const btn = document.getElementById('copyBtn');
+
+  const doSuccess = () => {
+    btn.textContent = '✓ Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy 🔗'; btn.classList.remove('copied'); }, 2500);
+  };
+
+  // Modern clipboard API
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(linkText).then(doSuccess).catch(() => fallbackCopy(linkText, doSuccess));
+  } else {
+    fallbackCopy(linkText, doSuccess);
+  }
+}
+
+function fallbackCopy(text, onSuccess) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.cssText = 'position:fixed;top:-9999px;left:-9999px;opacity:0;';
+  document.body.appendChild(ta);
+  ta.focus(); ta.select();
+  try {
+    document.execCommand('copy');
+    onSuccess();
+  } catch(e) {
+    alert('Please copy the link manually:\n\n' + text);
+  }
+  document.body.removeChild(ta);
+}
+
+// ===== LOAD GREETING FROM URL =====
+async function loadGreeting() {
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get('id');
+
+  if (!id) return;
+
+  try {
+    const response = await fetch(`${FUNCTION_URL}?id=${encodeURIComponent(id)}`);
+    if (!response.ok) return;
+
+    const greeting = await response.json();
+    document.getElementById('bannerRecipient').textContent = greeting.to + ' & Family';
+    document.getElementById('bannerMessage').textContent = greeting.msg || autoMessages[0];
+    document.getElementById('bannerFrom').textContent = '— With Love & Eid Blessings, ' + greeting.from + ' 🌙';
+    document.getElementById('personalizedBanner').style.display = 'block';
+    document.title = `Eid Mubarak, ${greeting.to}! 🌙`;
+    setTimeout(() => {
+      document.getElementById('personalizedBanner').scrollIntoView({ behavior:'smooth', block:'center' });
+    }, 800);
+  } catch (error) {
+    console.warn('Unable to load greeting:', error);
+  }
+}
+loadGreeting();
+</script>
+</body>
+</html>
